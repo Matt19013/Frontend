@@ -7,7 +7,7 @@ const updateProductPrice = document.querySelector('#update-price');
 
 // Function to fetch all products from the server
 async function fetchProducts() {
-  const response = await fetch('http://localhost:3000/products');
+  const response = await fetch('http://3.16.90.165:3000/products');
   const products = await response.json();
 
   // Clear product list
@@ -54,7 +54,7 @@ addProductForm.addEventListener('submit', async event => {
 
 // Function to add a new product
 async function addProduct(name, price) {
-  const response = await fetch('http://localhost:3000/products', {
+  const response = await fetch('http://3.16.90.165:3000/products', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json'
@@ -66,7 +66,7 @@ async function addProduct(name, price) {
 
 // Function to delete a new product
 async function deleteProduct(id) {
-  const response = await fetch('http://localhost:3000/products/' + id, {
+  const response = await fetch('http://3.16.90.165:3000/products/' + id, {
     method: 'DELETE',
     headers: {
       'Content-Type': 'application/json'
@@ -75,6 +75,55 @@ async function deleteProduct(id) {
   });
   return response.json();
 }
+const productDescription = document.querySelector('#product-description');
+
+
+async function addProduct(name, price, description) {
+  const response = await fetch('http://3.16.90.165:3000/products', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({ name, price, description })
+  });
+  return response.json();
+}
+
+
+addProductForm.addEventListener('submit', async event => {
+  event.preventDefault();
+  const name = addProductForm.elements['name'].value;
+  const price = addProductForm.elements['price'].value;
+  const description = productDescription.value;
+  await addProduct(name, price, description);
+  addProductForm.reset();
+  await fetchProducts();
+});
+
+async function updateProduct(id, name, price) {
+  const response = await fetch('http://3.16.90.165:3000/products/' + id, {
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({ name, price })
+  });
+  return response.json();
+}
+
+
+updateProductForm.addEventListener('submit', async event => {
+  event.preventDefault();
+  const id = updateProductId.value;
+  const name = updateProductName.value;
+  const price = updateProductPrice.value;
+  await updateProduct(id, name, price);
+  updateProductForm.reset();
+  await fetchProducts();
+});
+
+
 
 // Fetch all products on page load
 fetchProducts();
+
